@@ -12,8 +12,8 @@ app.use(cors());
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
-    key_id: "rzp_test_2r4RjQY2BcnXVF",
-    key_secret: "hbe7JQwfYD4e06b5qsBYjzq9",
+    key_id: "",
+    key_secret: "",
   });
 // Create an order
 app.post('/create-order', async (req, res) => {
@@ -41,7 +41,7 @@ app.post('/verify-payment', (req, res) => {
 
     const text = `${orderId}|${paymentId}`;
     const expectedSignature = crypto
-      .createHmac('sha256', 'hbe7JQwfYD4e06b5qsBYjzq9')
+      .createHmac('sha256', '')
       .update(text)
       .digest('hex');
 
