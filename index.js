@@ -28,6 +28,7 @@ app.post('/create-order', async (req, res) => {
 
     const order = await razorpay.orders.create(options);
     res.status(200).json(order);
+    console.log("Order created success")
   } catch (error) {
     console.error('Error creating order:', error);
     res.status(500).json({ error: 'Failed to create order' });
@@ -38,7 +39,9 @@ app.post('/create-order', async (req, res) => {
 app.post('/verify-payment', (req, res) => {
   try {
     const { orderId, paymentId, signature } = req.body;
-
+    console.log(orderId);
+    console.log(paymentId);
+    console.log(signature);
     const text = `${orderId}|${paymentId}`;
     const expectedSignature = crypto
       .createHmac('sha256', '')
@@ -47,8 +50,12 @@ app.post('/verify-payment', (req, res) => {
 
     if (expectedSignature === signature) {
       res.status(200).json({ valid: true });
+      console.log("success")
+      console.log(expectedSignature)
     } else {
       res.status(400).json({ valid: false, error: 'Invalid signature' });
+      console.log("failed")
+      console.log(expectedSignature)
     }
   } catch (error) {
     console.error('Error verifying payment:', error);
