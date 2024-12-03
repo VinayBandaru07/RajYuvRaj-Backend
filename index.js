@@ -25,7 +25,7 @@ app.post('/create-order', async (req, res) => {
       currency: 'INR',
       receipt,
     };
-
+    console.log(amount)
     const order = await razorpay.orders.create(options);
     res.status(200).json(order);
     console.log("Order created success")
@@ -44,7 +44,7 @@ app.post('/verify-payment', (req, res) => {
     console.log(signature);
     const text = `${orderId}|${paymentId}`;
     const expectedSignature = crypto
-      .createHmac('sha256', '')
+      .createHmac('sha256', process.env.SECRET_KEY)
       .update(text)
       .digest('hex');
 
