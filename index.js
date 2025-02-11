@@ -63,46 +63,6 @@ app.post('/verify-payment', (req, res) => {
   }
 });
 
-// Fetch payment details
-app.get('/fetch-payment/:paymentId', async (req, res) => {
-    try {
-        const { paymentId } = req.params;
-        const payment = await razorpay.payments.fetch(paymentId);
-
-        if (!payment) {
-            return res.status(404).json({ success: false, message: "Payment not found" });
-        }
-
-        res.status(200).json({ success: true, payment });
-    } catch (error) {
-        console.error('Error fetching payment:', error);
-        res.status(500).json({ success: false, error: 'Failed to fetch payment details' });
-    }
-});
-
-// Check payment status
-app.get('/check-payment/:orderId', async (req, res) => {
-    try {
-        const { orderId } = req.params;
-        const payments = await razorpay.orders.fetchPayments(orderId);
-        
-        if (payments.items.length === 0) {
-            return res.status(404).json({ success: false, message: "No payments found for this order ID" });
-        }
-
-        const payment = payments.items[0];
-        if (payment.status === 'captured') {
-            return res.status(200).json({ success: true, payment });
-        } else {
-            return res.status(400).json({ success: false, message: "Payment not captured yet", payment });
-        }
-    } catch (error) {
-        console.error('Error fetching payment status:', error);
-        res.status(500).json({ success: false, error: 'Failed to check payment status' });
-    }
-});
-
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
