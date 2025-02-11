@@ -63,6 +63,23 @@ app.post('/verify-payment', (req, res) => {
   }
 });
 
+// Fetch payment details
+app.get('/fetch-payment/:paymentId', async (req, res) => {
+    try {
+        const { paymentId } = req.params;
+        const payment = await razorpay.payments.fetch(paymentId);
+
+        if (!payment) {
+            return res.status(404).json({ success: false, message: "Payment not found" });
+        }
+
+        res.status(200).json({ success: true, payment });
+    } catch (error) {
+        console.error('Error fetching payment:', error);
+        res.status(500).json({ success: false, error: 'Failed to fetch payment details' });
+    }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
